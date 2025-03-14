@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CORS Test</title>
+</head>
+
+<body>
+	<h1>CORS Test</h1>
+	<p>Enter the URL of an API:</p>
+	<form id="form">
+		<input type="url" id="url" style="width: 30%;" required>
+		<button type="submit">Make Request</button>
+	</form>
+	<p id="response">Response will display here</p>
+
+	<script>
+		document.getElementById('form').addEventListener('submit', event => {
+			event.preventDefault();
+			makeRequest();
+		});
+
+		function makeRequest() {
+			const responseElement = document.getElementById('response');
+			const url = document.getElementById('url').value;
+			responseElement.textContent = 'Loading...';
+
+			fetch(url)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`HTTP error! Status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					responseElement.textContent = JSON.stringify(data, null, 2);
+					console.log('Success:', data);
+				})
+				.catch(error => {
+					responseElement.textContent = `Error: ${error.message}`;
+					console.error('Error:', error);
+				});
+		}
+	</script>
+</body>
+
+</html>
